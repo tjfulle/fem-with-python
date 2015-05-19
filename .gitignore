@@ -1,0 +1,11 @@
+*.pyc
+.ipynb_checkpoints/*
+Lessons/.ipynb_checkpoints/*
+Lessons/Assignment*
+myapplications.py
+my*.xml
+my_*.py
+foo.*
+.DS_Store
+*.dbx
+*.exo
