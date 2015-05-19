@@ -1,5 +1,12 @@
+import sys
 import logging
 import numpy as np
+from os.path import dirname, realpath
+
+# insert fem-with-python directory in to path
+D = dirname(dirname(realpath(__file__)))
+sys.path.insert(0, D)
+
 from femlib.ifem import simplemesh, solve_system, write_results, view_results
 
 def uniform_bar(xa, xb, num_elem, A, E, P):
