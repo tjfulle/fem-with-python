@@ -42,6 +42,8 @@ def solve_system(nodes, vertices, elements, connect, k, bcs, cfs,
     '''
     nodes = aslist(nodes)
     elements = aslist(elements)
+    vertices = np.asarray(vertices)
+    connect = np.asarray(connect)
 
     # Check that user input is consistent
     if len(vertices.shape) == 1:

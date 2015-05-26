@@ -9,7 +9,7 @@ sys.path.insert(0, D)
 
 from femlib.ifem import simplemesh, solve_system, write_results, view_results
 
-def uniform_bar(xa, xb, num_elem, A, E, P):
+def uniform_bar(xa, xb, num_elem, A, E, P, filename=None):
     '''Computes the displacements, reactions, stresses, and strains in a
     uniform bar fixed at its origin subject to force P at its end using finite
     elements
@@ -73,11 +73,12 @@ def uniform_bar(xa, xb, num_elem, A, E, P):
     stress = E * strain
 
     # save information to file and view results
-    node_data = {'U': u, 'R': r}
-    element_data = {'S': stress, 'E': strain}
-    write_results('uniformbar.exo', nodes, vertices, elements, connect,
-                  node_data, element_data)
-    view_results('uniformbar.exo')
+    if filename is not None:
+        node_data = {'U': u, 'R': r}
+        element_data = {'S': stress, 'E': strain}
+        write_results(filename, nodes, vertices, elements, connect,
+                      node_data, element_data)
+        view_results(filename)
 
     return u, r, strain, stress
 
