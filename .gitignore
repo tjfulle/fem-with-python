@@ -4,7 +4,8 @@ Lessons/.ipynb_checkpoints/*
 Assignments/
 myapplications.py
 my*.xml
-my_*.py
+my*.py
+my*.ipynb
 foo.*
 .DS_Store
 *.dbx
