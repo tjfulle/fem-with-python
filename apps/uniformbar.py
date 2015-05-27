@@ -72,7 +72,6 @@ def uniform_bar(xa, xb, num_elem, A, E, P, filename=None):
         strain[el] = (u[j] - u[i]) / (vertices[j] - vertices[i])
     stress = E * strain
 
-    # save information to file and view results
     if filename is not None:
         node_data = {'U': u, 'R': r}
         element_data = {'S': stress, 'E': strain}
