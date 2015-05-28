@@ -1,7 +1,7 @@
 *.pyc
 .ipynb_checkpoints/*
 Lessons/.ipynb_checkpoints/*
-Assignments/
+Assignments/*
 myapplications.py
 my*.xml
 my*.py
