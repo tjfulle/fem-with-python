@@ -61,12 +61,6 @@ def uniform_bar(xa, xb, num_elem, A, E, P, filename=None):
         # and right nodes. Using the indices, determine the change in length
         # of the element and divide by the original element length. This is
         # the strain for the el'th element.
-
-        # HINT: see the docstring to femlib.ifem.simplemesh for a description
-        # of the nodes list.
-
-        # HINT: use the 'index' list method to determine the DOF index
-
         i = nodes.index(econn[0])
         j = nodes.index(econn[1])
         strain[el] = (u[j] - u[i]) / (vertices[j] - vertices[i])

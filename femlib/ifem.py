@@ -22,8 +22,8 @@ def solve_system(nodes, vertices, elements, connect, k, bcs, cfs,
         elements[i] is the label of element i
     connect :
         connect[i,j] is the jth node of element i
-    k : dict
-        dict[i] is the stiffness of element i
+    k : list
+        k[i] is the stiffness of the ith element
     bcs : list
         List of nodal boundary conditions. bcs[i] = (n, dof, bc) where n is
         the node number, dof is one of x or y, and bc is the magnitude of the
@@ -53,7 +53,7 @@ def solve_system(nodes, vertices, elements, connect, k, bcs, cfs,
     errors = 0
     num_elem = connect.shape[0]
     if num_elem != len(k):
-        logging.error('wront number of element stiffnesses')
+        logging.error('wrong number of element stiffnesses')
         errors += 1
     if connect.shape[1] != 2:
         logging.error('expected 2 nodes per element')
