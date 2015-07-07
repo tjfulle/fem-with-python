@@ -124,7 +124,6 @@ class FunctionSpace(object):
         '''Assemble B = Integrate[fun(x) phi(x) dx or with dphi/dx
 
         '''
-        #@tjfulle: coords should be updated to pass in actual nodal coordinates
         B = np.zeros(self.num_dof)
         # loop over elements
         for element in self.elements:

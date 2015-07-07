@@ -15,7 +15,6 @@ class FiniteElement(object):
     num_gauss = None
     gauss_weights = None
     gauss_points = None
-    variables = ('STRESS', 'STRAIN')
 
     def iso_p_map(self, xi, coords=None):
         '''Isoparametric mapping from natural coordinate to spatial coordinates

@@ -261,22 +261,6 @@ def test_funspace_9():
     # norm check (d/dx+Dirichlet sol=x)
     assert norm(rhs - b) < 1.e-12
 
-def test_funspace_app():
-    '''Test FunctionSpace using method of manufactured solutions'''
-    err = funspace_mms(5, '1')
-    assert err < 1.e-12
-
-    err = funspace_mms(5, 'x')
-    assert err < 1.e-12
-
-    # for a nonlinear solution, the error is expected to be larger
-    err = funspace_mms(50, 'x ** 2')
-    assert err < 1.e-4
-
-    # for a nonlinear solution, the error is expected to be larger
-    err = funspace_mms(50, 'sin(x)')
-    assert err < 1.e-4
-
 def test_mesh():
     '''Basic test of the Mesh factory method and mesh extending'''
     ox, dx, nx = 0., 10., 5
@@ -316,78 +300,3 @@ def test_solve_system():
     assert areclose(d, u[-1])
     assert areclose(P, -r[0])
     assert allclose(r[1:], 0.)
-
-def funspace_mms(num_elem, ms, var='x', bc='dirichlet'):
-    '''Generic verification runs for ODE u'' + 2 u' + u = rh on [0,1]
-    using the method of manufactured solutions.
-
-    Parameters
-    ----------
-    num_elem : int
-        Number of elements
-    ms : string
-        A sympy parsible string that gives a function representing the
-        manufactured solution
-    var : string, optional [x]
-        Variable name appearing in the manufactured solution
-    bc : string, optional [dirichlet] {dirichlet, neumann}
-        Boundary condition type
-
-    Returns
-    -------
-    error : float
-        Relative error
-
-    '''
-    assert bc in ('dirichlet', 'neumann')
-
-    # N elements in [0, 1]
-    mesh = Mesh(type='uniform', ox=0., lx=1., nx=num_elem)
-    mesh.ElementBlock(name='Block-1', elements='all')
-
-    # Function space
-    V = FunctionSpace(mesh, {'Block-1': Element(type='link2')})
-
-    # manufactured solution
-    x = symbols(var)
-    u_expr = parse_expr(ms, transformations=standard_transformations)
-    uf = lambdify(x, u_expr, modules='numpy')
-
-    # evaluate manufactured solution at vertices
-    u = uf(V.X)
-    try:
-        u[0]
-    except TypeError:
-        # forcing function was a constant - force its evaluation to be an array
-        u *= np.ones_like(V.X)
-
-    # create the right hand side forcing term
-    rhs = lambdify(x, diff(u_expr, x, x) + 2 * diff(u_expr, x) + u_expr)
-    b = V.int_phi(rhs)
-
-    # assemble stiffness matrix: u'' + 2 u' + u
-    # integration by parts on first term introduces minus sign
-    A = -V.int_phi_phi(derivative=(True, True)) \
-      + 2 * V.int_phi_phi(derivative=(False,True)) \
-      + V.int_phi_phi()
-
-    # boundary conditions
-    if bc == 'dirichlet':
-        # left bndry
-        A[0, 0] = 1.
-        A[0, 1:] = 0.
-        b[0] = u[0]
-
-        # right bndry
-        A[-1, -1] = 1.
-        A[-1, 0:-1] = 0.
-        b[-1] = u[-1]
-
-    elif bc == 'neumann':
-        raise NotImplementedError
-
-    # solve
-    u_fe = np.linalg.solve(A, b)
-
-    # return the error
-    return relerr(u, u_fe)
