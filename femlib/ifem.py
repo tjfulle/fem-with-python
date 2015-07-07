@@ -8,7 +8,7 @@ __all__ = ['solve_system', 'simplemesh', 'display_truss']
 DOFS = {'x': 0, 'y': 1, 'z': 2}
 
 def solve_system(nodes, vertices, elements, connect, k, bcs, cfs,
-                 bc_method='default'):
+                 num_dof_per_node=None, bc_method='default'):
     '''Computes the dependent variable of a linear system Ku = F by
     finite elements
 
@@ -84,7 +84,7 @@ def solve_system(nodes, vertices, elements, connect, k, bcs, cfs,
         raise SystemExit('stopping due to previous errors')
 
     # total number of degrees of freedom
-    num_dof_per_node = num_dim
+    num_dof_per_node = num_dof_per_node or num_dim
     num_dof = num_node * num_dof_per_node
 
     # Assemble stiffness
@@ -125,7 +125,8 @@ def solve_system(nodes, vertices, elements, connect, k, bcs, cfs,
             Kbc[i, i] = 1
 
         elif bc_method == 'penalty':
-            raise NotImplementedError('bc_method=="penalty"')
+            Kbc[i, i] = X
+            Fbc[i] = X * bc
 
         else:
             raise ValueError('unknown bc_method {0}'.format(method))

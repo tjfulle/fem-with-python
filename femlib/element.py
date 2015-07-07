@@ -38,26 +38,6 @@ class FiniteElement(object):
             coords = self.X
         return np.dot(self.shape.eval(xi), coords)
 
-    def inv_map(self, x, coords=None):
-        '''The mapping xi(x)
-
-        Parameters
-        ----------
-        x : real
-            Spatial coordinate x
-        coords : ndarray
-            Spatial coordinates of element nodes
-
-        Returns
-        -------
-        xi : real
-            Mapping of x to natural coordinates
-
-        '''
-        if coords is None:
-            coords = self.X
-        return (x - coords[0]) / (coords[1] - coords[0])
-
     def jacobian(self, xi, coords=None):
         """Compute the Jacobian of the element deformation
 
@@ -86,47 +66,6 @@ class FiniteElement(object):
             coords = self.X
         df = self.shape.grad(xi)
         return np.dot(df, coords)
-
-    def eval(self, x, coords=None):
-        '''Evaluate the shape function on this element at spatial coordinate x
-
-        Parameters
-        ----------
-        x : real
-            Spatial coordinate x
-        coords : ndarray
-            Spatial coordinates of element nodes
-
-        Returns
-        -------
-        N : ndarray
-            The shape function evaluated at xi(x)
-
-        '''
-        x = np.asarray(x)
-        xi = self.inv_map(x, coords)
-        return self.shape.eval(xi)
-
-    def grad(self, x, coords=None):
-        '''Evaluate the shape function derivative on this element at spatial
-        coordinate x
-
-        Parameters
-        ----------
-        x : real
-            Spatial coordinate x
-        coords : ndarray
-            Spatial coordinates of element nodes
-
-        Returns
-        -------
-        dN : ndarray
-            The shape function derivative evaluated at xi(x)
-
-        '''
-        x = np.asarray(x)
-        xi = self.inv_map(x, coords)
-        return self.shape.grad(xi)
 
     def integrate(self, f1=None, f2=None, coords=None,
                   derivative=False, atgauss=(False, False)):
@@ -245,7 +184,7 @@ def Element(type='Link2', coeff=None):
         if type.lower() == klass.name.lower():
             break
     else:
-        raise ValueError('{0} is not a recognized element type')
+        raise ValueError('{0} is not a recognized element type'.format(type))
 
     def create_element(*args):
         kwds = {'coeff': coeff}
