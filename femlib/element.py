@@ -179,7 +179,13 @@ def Element(type='Link2', coeff=None):
     block can create its own element instance.
 
     '''
-    for klass in FiniteElement.__subclasses__():
+    klasses = [LinearElement]
+    try:
+        from myelement import QuadraticElement
+        klasses.append(QuadraticElement)
+    except ImportError:
+        print 'myelement module not imported'
+    for klass in klasses:
         if type.lower() == klass.name.lower():
             break
     else:

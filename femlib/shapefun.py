@@ -1,6 +1,10 @@
 import numpy as np
 
-class LinearGaussLegendre1D:
+class GaussLegendreShapeFunction(object):
+    num_points = None
+    num_coord = None
+
+class LinearGaussLegendre1D(GaussLegendreShapeFunction):
     num_points = 2
     num_coord = 1
     def eval(self, xi):
